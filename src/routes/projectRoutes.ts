@@ -60,6 +60,6 @@ router.delete(
 );
 
 /*ACA ESTAN LAS RUTAS DE LAS TAREAS*/
-router.post("/:projectId/tasks", TaskController.createProject);
+router.post("/:projectId/tasks", TaskController.createTask);
 
 export default router;

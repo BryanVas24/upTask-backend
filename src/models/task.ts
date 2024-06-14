@@ -48,4 +48,4 @@ export const TaskSchema: Schema = new Schema(
 );
 
 //esto conecta el schema con la interfaz
-const Task = mongoose.model<ITask>("Task", TaskSchema);
+export const Task = mongoose.model<ITask>("Task", TaskSchema);
