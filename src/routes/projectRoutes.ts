@@ -3,6 +3,7 @@ import { ProjectController } from "../controllers/ProjectController";
 //el param es para tomar el id de un registro de mongo
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
+import { TaskController } from "../controllers/TaskController";
 const router = Router();
 //cuando hagan post a la ruta api/projects
 router.post(
@@ -57,5 +58,8 @@ router.delete(
   param("id").isMongoId().withMessage("id no válido"),
   ProjectController.deleteProject
 );
+
+/*ACA ESTAN LAS RUTAS DE LAS TAREAS*/
+router.post("/:projectId/tasks", TaskController.createProject);
 
 export default router;
