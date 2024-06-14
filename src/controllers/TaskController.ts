@@ -14,7 +14,14 @@ export class TaskController {
     }
     try {
       const task = new Task(req.body);
+      //obtenes el id del proyecto al que se le va a asignar la tarea
+      task.proyect = project.id;
+      //acá le metes datos al array de project
+      project.tasks.push(task.id);
+
       await task.save();
+      await project.save();
+      res.send("Tarea creada exitosamente");
     } catch (error) {
       console.error("Ocurrio el siguiente error:", error);
     }
