@@ -74,4 +74,10 @@ router.post(
   TaskController.createTask
 );
 
+router.get(
+  "/:projectId/tasks",
+  validateProjectExist,
+  TaskController.getProjectTask
+);
+
 export default router;

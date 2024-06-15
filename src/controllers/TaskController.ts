@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import Project from "../models/project";
 import { Task } from "../models/task";
 
 export class TaskController {
@@ -14,7 +13,14 @@ export class TaskController {
       await Promise.allSettled([task.save(), req.project.save()]);
       res.send("Tarea creada exitosamente");
     } catch (error) {
-      console.error("Ocurrio el siguiente error:", error);
+      res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
+    }
+  };
+  static getProjectTask = async (req: Request, res: Response) => {
+    try {
+      const tasks = await Task.find({ project: req.project.id });
+    } catch (error) {
+      res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
   };
 }
