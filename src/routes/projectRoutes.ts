@@ -4,6 +4,7 @@ import { ProjectController } from "../controllers/ProjectController";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import { TaskController } from "../controllers/TaskController";
+import { validateProjectExist } from "../middleware/project";
 const router = Router();
 //cuando hagan post a la ruta api/projects
 router.post(
@@ -60,6 +61,10 @@ router.delete(
 );
 
 /*ACA ESTAN LAS RUTAS DE LAS TAREAS*/
-router.post("/:projectId/tasks", TaskController.createTask);
+router.post(
+  "/:projectId/tasks",
+  validateProjectExist,
+  TaskController.createTask
+);
 
 export default router;
