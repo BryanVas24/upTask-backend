@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   "/",
   //acá se valida con express-validator
-  body("ProjectName")
+  body("projectName")
     .notEmpty()
     .withMessage("El nombre del proyecto es obligatorio"),
   body("clientName")
@@ -39,7 +39,7 @@ router.put(
   //esto es para ver si el id es de mongo
   param("id").isMongoId().withMessage("id no válido"),
   //la validación con express-validator
-  body("ProjectName")
+  body("projectName")
     .notEmpty()
     .withMessage("El nombre del proyecto es obligatorio"),
   body("clientName")
