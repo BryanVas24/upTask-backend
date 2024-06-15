@@ -18,7 +18,10 @@ export class TaskController {
   };
   static getProjectTask = async (req: Request, res: Response) => {
     try {
-      const tasks = await Task.find({ project: req.project.id });
+      //esto es como hacer un where pero el populate te trae todos los datos de ese modelo
+      const tasks = await Task.find({ project: req.project.id }).populate(
+        "Project"
+      );
     } catch (error) {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
