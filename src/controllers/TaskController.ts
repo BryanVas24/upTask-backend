@@ -10,9 +10,8 @@ export class TaskController {
       task.proyect = req.project.id;
       //acá le metes datos al array de project
       req.project.tasks.push(task.id);
-
-      await task.save();
-      await req.project.save();
+      //el promise.allSettled sirve para que ambas promesas se cumnplan
+      await Promise.allSettled([task.save(), req.project.save()]);
       res.send("Tarea creada exitosamente");
     } catch (error) {
       console.error("Ocurrio el siguiente error:", error);
