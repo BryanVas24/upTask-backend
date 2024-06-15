@@ -64,6 +64,13 @@ router.delete(
 router.post(
   "/:projectId/tasks",
   validateProjectExist,
+  //siempre validando con express validator
+  body("name").notEmpty().withMessage("El nombre de la tarea es obligatorio"),
+  body("description")
+    .notEmpty()
+    .withMessage("La descripción de la tarea es obligatorio"),
+  //esto viene de middleware y verifica que no exista ningun mensaje de error
+  handleInputErrors,
   TaskController.createTask
 );
 
