@@ -5,6 +5,7 @@ import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import { TaskController } from "../controllers/TaskController";
 import { validateProjectExist } from "../middleware/project";
+import { validateTaskExist } from "../middleware/task";
 const router = Router();
 //cuando hagan post a la ruta api/projects
 router.post(
@@ -64,6 +65,8 @@ router.delete(
 
 //recibe un valor en la url y que hacer con el cada vez que una url lo tenga
 router.param("projectId", validateProjectExist);
+
+router.param("taskId", validateTaskExist);
 router.post(
   "/:projectId/tasks",
   //siempre validando con express validator
@@ -79,7 +82,7 @@ router.post(
 router.get("/:projectId/tasks", TaskController.getProjectTask);
 
 router.get(
-  "/:projectId/:taskId",
+  "/:projectId/tasks/:taskId",
   param("taskId").isMongoId().withMessage("id no válido"),
   TaskController.getTaskById
 );
