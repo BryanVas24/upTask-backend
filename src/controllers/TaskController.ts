@@ -82,4 +82,20 @@ export class TaskController {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
   };
+
+  static updateStatus = async (req: Request, res: Response) => {
+    try {
+      const { taskId } = req.params;
+      const task = await Task.findById(taskId);
+      if (!task) {
+        const error = new Error("Tarea no encontrada");
+        return res.status(404).json({ error: error.message });
+      }
+      const { status } = req.body;
+      task.status = status;
+      res.send("tarea Actualizada");
+    } catch (error) {
+      res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
+    }
+  };
 }
