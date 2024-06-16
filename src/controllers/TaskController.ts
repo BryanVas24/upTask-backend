@@ -29,9 +29,6 @@ export class TaskController {
 
   static getTaskById = async (req: Request, res: Response) => {
     try {
-      if (req.task.proyect.toString() !== req.project.id) {
-        return res.status(400).json({ error: "Acción invalida" });
-      }
       res.json(req.task);
     } catch (error) {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
@@ -40,9 +37,6 @@ export class TaskController {
 
   static updateTask = async (req: Request, res: Response) => {
     try {
-      if (req.task.proyect.toString() !== req.project.id) {
-        return res.status(400).json({ error: "Acción invalida" });
-      }
       req.task.name = req.body.name;
       req.task.description = req.body.description;
       await req.task.save();

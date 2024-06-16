@@ -34,12 +34,15 @@ export class ProjectController {
     //destructuración del id que viene en la url
     const { id } = req.params;
     try {
-      //busca y actualiza el proyecto, primero recibe el id y luego los nuevos datos
-      const project = await Project.findByIdAndUpdate(id, req.body);
+      //busca y actualiza el proyecto, primero recibe el id y luego los nuevos datos const project = await Project.findByIdAndUpdate(id,req.body);
+      const project = await Project.findById(id);
       //sino lo encuentra regresa un error
       if (!project) {
         return res.status(404).json({ error: "No se encontro el proyecto" });
       }
+      project.clientName = req.body.clientName;
+      project.projectName = req.body.projectName;
+      project.description = req.body.description;
       //esperas a que se guarden los nuevos datos
       await project.save;
       //respuesta del servidor

@@ -32,3 +32,14 @@ export async function validateTaskExist(
     res.status(400).json({ error: `Ocurrio un error: ${error}` });
   }
 }
+
+export function taskBelongsToProject(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.task.proyect.toString() !== req.project.id.toString()) {
+    return res.status(400).json({ error: "Acción invalida" });
+  }
+  next();
+}
