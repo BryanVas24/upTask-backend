@@ -47,7 +47,7 @@ export class TaskController {
   static updateTask = async (req: Request, res: Response) => {
     try {
       const { taskId } = req.params;
-      const task = await Task.findByIdAndUpdate(taskId, req.body);
+      const task = await Task.findById(taskId);
       if (!task) {
         const error = new Error("Tarea no encontrada");
         return res.status(404).json({ error: error.message });
@@ -55,7 +55,29 @@ export class TaskController {
       if (task.proyect.toString() !== req.project.id) {
         return res.status(400).json({ error: "Acción invalida" });
       }
+      task.name = req.body.name;
+      task.description = req.body.description;
+      await task.save();
       res.send("Tarea actualizada correctamente");
+    } catch (error) {
+      res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
+    }
+  };
+  static deleteTask = async (req: Request, res: Response) => {
+    try {
+      const { taskId } = req.params;
+      const task = await Task.findById(taskId);
+      if (!task) {
+        const error = new Error("Tarea no encontrada");
+        return res.status(404).json({ error: error.message });
+      }
+      //acá se setean las tareas nuevamente al projecto
+      req.project.tasks = req.project.tasks.filter(
+        (task) => task.toString() !== taskId
+      );
+      //borras una tarea y guardas cambios en projecto
+      await Promise.allSettled([task.deleteOne(), req.project.save()]);
+      res.json(task);
     } catch (error) {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
