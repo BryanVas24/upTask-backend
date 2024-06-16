@@ -60,10 +60,12 @@ router.delete(
   ProjectController.deleteProject
 );
 
-/*ACA ESTAN LAS RUTAS DE LAS TAREAS*/
+/*-----------------ACA ESTAN LAS RUTAS DE LAS TAREAS--------------------*/
+
+//recibe un valor en la url y que hacer con el cada vez que una url lo tenga
+router.param("projectId", validateProjectExist);
 router.post(
   "/:projectId/tasks",
-  validateProjectExist,
   //siempre validando con express validator
   body("name").notEmpty().withMessage("El nombre de la tarea es obligatorio"),
   body("description")
@@ -74,15 +76,11 @@ router.post(
   TaskController.createTask
 );
 
-router.get(
-  "/:projectId/tasks",
-  validateProjectExist,
-  TaskController.getProjectTask
-);
+router.get("/:projectId/tasks", TaskController.getProjectTask);
 
 router.get(
   "/:projectId//:taskId",
-  validateProjectExist,
+  param("taskId").isMongoId().withMessage("id no válido"),
   TaskController.getTaskById
 );
 
