@@ -6,7 +6,7 @@ export class ProjectController {
   static getAllProjects = async (req: Request, res: Response) => {
     try {
       const projects = await Project.find({});
-      res.json({ message: "Todos los proyectos", projects });
+      res.json(projects);
     } catch (error) {
       console.error(error);
     }
