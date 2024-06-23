@@ -31,6 +31,7 @@ router.get("/", ProjectController.getAllProjects);
 router.get(
   "/:id",
   param("id").isMongoId().withMessage("id no válido"),
+  handleInputErrors,
   //aca se manda a llamar la funcion que hace el get del proyecto dependiendo del id
   ProjectController.getOneProject
 );
