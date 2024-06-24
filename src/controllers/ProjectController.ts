@@ -41,11 +41,12 @@ export class ProjectController {
       if (!project) {
         return res.status(404).json({ error: "No se encontro el proyecto" });
       }
+
       project.clientName = req.body.clientName;
       project.projectName = req.body.projectName;
       project.description = req.body.description;
       //esperas a que se guarden los nuevos datos
-      await project.save;
+      await project.save();
       //respuesta del servidor
       res.send("Proyecto Actualizado");
     } catch (error) {
