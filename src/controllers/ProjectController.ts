@@ -13,19 +13,20 @@ export class ProjectController {
   };
   //toma un  proyecto
   static getOneProject = async (req: Request, res: Response) => {
-    //destructuración del id que viene en la url
+    // Destructuración del id que viene en la url
     const { id } = req.params;
     try {
-      //Esperas a que encuentre el proyecto
-      const project = (await Project.findById(id)).populate("tasks");
-      //si no lo encuentra tira error
+      // Encuentra el proyecto y luego realiza populate en tasks
+      const project = await Project.findById(id).populate("tasks");
+      // Si no lo encuentra tira error
       if (!project) {
-        return res.status(404).json({ error: "No se encontro el proyecto" });
+        return res.status(404).json({ error: "No se encontró el proyecto" });
       }
-      //envias los datos del proyecto encontrado
-      res.json({ message: "Proyecto con id " + id + " encontrado", project });
+      // Envías los datos del proyecto encontrado
+      res.json(project);
     } catch (error) {
       console.error(error);
+      res.status(500).json({ error: "Error al obtener el proyecto" });
     }
   };
   //actualiza el producto
