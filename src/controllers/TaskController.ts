@@ -22,6 +22,7 @@ export class TaskController {
       const tasks = await Task.find({ project: req.project.id }).populate(
         "Project"
       );
+      res.json(tasks);
     } catch (error) {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
