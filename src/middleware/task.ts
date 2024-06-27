@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { Task, ITask } from "../models/task";
+import Task, { ITask } from "../models/task";
 
 //esto es de ts y permite escribir el scope global
 declare global {
@@ -38,7 +38,7 @@ export function taskBelongsToProject(
   res: Response,
   next: NextFunction
 ) {
-  if (req.task.proyect.toString() !== req.project.id.toString()) {
+  if (req.task.project.toString() !== req.project.id.toString()) {
     return res.status(400).json({ error: "Acción invalida" });
   }
   next();

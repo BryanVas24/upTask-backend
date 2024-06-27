@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
-import { Task } from "../models/task";
+import Task from "../models/task";
 
 export class TaskController {
   static createTask = async (req: Request, res: Response) => {
     try {
       const task = new Task(req.body);
       //obtenes el id del proyecto al que se le va a asignar la tarea
-      task.proyect = req.project.id;
+      task.project = req.project.id;
       //acá le metes datos al array de project
       req.project.tasks.push(task.id);
       //el promise.allSettled sirve para que ambas promesas se cumnplan
@@ -20,7 +20,7 @@ export class TaskController {
     try {
       //esto es como hacer un where pero el populate te trae todos los datos de ese modelo
       const tasks = await Task.find({ project: req.project.id }).populate(
-        "Project"
+        "project"
       );
       res.json(tasks);
     } catch (error) {

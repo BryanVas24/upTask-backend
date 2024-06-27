@@ -16,7 +16,7 @@ export interface ITask extends Document {
   name: string;
   description: string;
   //types sirve para acceder a los tipos que tambien brinda mongoo
-  proyect: Types.ObjectId;
+  project: Types.ObjectId;
   status: TaskStatus;
 }
 
@@ -27,12 +27,12 @@ export const TaskSchema: Schema = new Schema(
       required: true,
       trim: true,
     },
-    clientName: {
+    description: {
       type: String,
       required: true,
       trim: true,
     },
-    proyect: {
+    project: {
       type: Types.ObjectId,
       //basicamente lo va a buscar al otro modelo llamado Project
       ref: "Project",
@@ -48,4 +48,5 @@ export const TaskSchema: Schema = new Schema(
 );
 
 //esto conecta el schema con la interfaz
-export const Task = mongoose.model<ITask>("Task", TaskSchema);
+const Task = mongoose.model<ITask>("Task", TaskSchema);
+export default Task;
