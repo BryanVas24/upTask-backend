@@ -4,7 +4,7 @@ export const corsConfig: CorsOptions = {
   origin: function (origin, callback) {
     const whiteList = [process.env.FRONTEND_URL];
     //esto es para permitir que thunderclient haga solicitudes
-    //sale del .json
+    //el process .argv sale del json
     if (process.argv[2] === "--api") {
       whiteList.push(undefined);
     }

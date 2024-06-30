@@ -1,9 +1,25 @@
 import { Router } from "express";
-import { Request, Response } from "express";
+import { body } from "express-validator";
+import { AuthController } from "../controllers/authController";
+import { handleInputErrors } from "../middleware/validation";
+
 const router = Router();
 
-router.get("/", (req: Request, response: Response) => {
-  response.send("desde auth");
-});
+router.post(
+  "/create-account",
+  body("name").notEmpty().withMessage("El nombre no puede estar vacio"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("El password es muy corto, minímo 8 caracteres"),
+  body("email").isEmail().withMessage("El email debe ser valido"),
+  body("password_confirmation").custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error("Las contraseñas no coinciden");
+    }
+    return true;
+  }),
+  handleInputErrors,
+  AuthController.createAccount
+);
 
 export default router;
