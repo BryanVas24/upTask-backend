@@ -42,12 +42,20 @@ export class AuthController {
   static confirmAccount = async (req: Request, res: Response) => {
     try {
       const { token } = req.body;
+      //verifica que exista el token
       const tokenExist = await Token.findOne({ token });
+      //si el token no existe arroja error
       if (!tokenExist) {
         const error = new Error("Token no válido");
         return res.status(401).json({ error: error.message });
       }
-      await res.send("Cuenta creada, revisa tu email para confirmarla");
+      // conseguis los datos del usuario al que le enviaron el token
+      const user = await User.findById(tokenExist.user);
+      //cambias el estado de confirmed de false a true
+      user.confirmed = true;
+      //agregas lo nuevo al usuario y borras el token
+      await Promise.allSettled([user.save(), tokenExist.deleteOne()]);
+      await res.send("Cuenta confirmada correctamente");
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
