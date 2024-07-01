@@ -3,6 +3,8 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import Token from "../models/Token";
 import { generateToken } from "../utils/token";
+import { AuthEmail } from "../emails/AuthEmails";
+
 export class AuthController {
   static createAccount = async (req: Request, res: Response) => {
     try {
@@ -23,6 +25,12 @@ export class AuthController {
       const token = new Token();
       token.token = generateToken();
       token.user = user.id;
+      //para enviar el correo
+      AuthEmail.sendConfirmationEmail({
+        email: user.email,
+        name: user.name,
+        token: token.token,
+      });
       //esperando a que se cumplan ambas promesas
       await Promise.allSettled([user.save(), token.save()]);
 
