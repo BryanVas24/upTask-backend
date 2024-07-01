@@ -89,6 +89,14 @@ export class AuthController {
         );
         return res.status(401).json({ error: error.message });
       }
+      //verificar password
+      //sirve para las contras hasheadas
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isPasswordCorrect) {
+        const error = new Error("Password incorrecta");
+        return res.status(401).json({ error: error.message });
+      }
+
       res.send("Inicio de sesión exitoso");
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
