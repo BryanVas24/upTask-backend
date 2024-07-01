@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import Token from "../models/Token";
 import { generateToken } from "../utils/token";
 import { AuthEmail } from "../emails/AuthEmails";
+import { token } from "morgan";
 
 export class AuthController {
   static createAccount = async (req: Request, res: Response) => {
@@ -67,6 +68,25 @@ export class AuthController {
       const user = await User.findOne({ email });
       if (!user) {
         const error = new Error("Usuario no encontrado");
+        return res.status(404).json({ error: error.message });
+      }
+      //si la cuenta no esta confirmada se envia un token al correo
+      if (!user.confirmed) {
+        //instancia de token
+        const token = new Token();
+        //se asigna un usuario al token
+        token.user = user.id;
+        //se genera el token
+        token.token = generateToken();
+        //para enviar el correo
+        AuthEmail.sendConfirmationEmail({
+          email: user.email,
+          name: user.name,
+          token: token.token,
+        });
+        const error = new Error(
+          "La cuenta no a sido confirmada, hemos enviado un email"
+        );
         return res.status(401).json({ error: error.message });
       }
       res.send("Inicio de sesión exitoso");
