@@ -41,5 +41,11 @@ router.post(
   handleInputErrors,
   AuthController.resendEmail
 );
+router.post(
+  "/forgot-password",
+  body("email").isEmail().withMessage("email no valido"),
+  handleInputErrors,
+  AuthController.forgotPassword
+);
 
 export default router;

@@ -113,7 +113,7 @@ export class AuthController {
         const error = new Error("El usuario no esta registrado");
         return res.status(404).json({ error: error.message });
       }
-
+      //por si el usuario ya esta confirmado
       if (userExist.confirmed) {
         const error = new Error("El usuario ya esta confirmado");
         return res.status(403).json({ error: error.message });
@@ -134,6 +134,35 @@ export class AuthController {
 
       await res.send(
         "Se envio un nuevo token, revisa tu email para confirmarlo"
+      );
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
+  static forgotPassword = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      //revisa si el usuario existe
+      const userExist = await User.findOne({ email });
+      if (!userExist) {
+        const error = new Error("El usuario no esta registrado");
+        return res.status(404).json({ error: error.message });
+      }
+
+      //Generar el token
+      const token = new Token();
+      token.token = generateToken();
+      token.user = userExist.id;
+      await token.save();
+      //para enviar el correo
+      AuthEmail.sendPasswordResetToken({
+        email: userExist.email,
+        name: userExist.name,
+        token: token.token,
+      });
+
+      await res.send(
+        "Se envio un nuevo token, revisa tu email para instrucciones"
       );
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
