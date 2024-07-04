@@ -182,9 +182,28 @@ export class AuthController {
         return res.status(404).json({ error: error.message });
       }
 
-      await res.send(
-        "Token valido, define tu nuevo password"
-      );
+      await res.send("Token valido, define tu nuevo password");
+    } catch (error) {
+      res.status(500).json({ error: "Hubo un error" });
+    }
+  };
+
+  static passwordChangeWhitToken = async (req: Request, res: Response) => {
+    try {
+      const { token, password } = req.body;
+      //revisa si el token es valido
+      const tokenExist = await Token.findOne({ token });
+      if (!tokenExist) {
+        const error = new Error("Token no válido");
+        return res.status(404).json({ error: error.message });
+      }
+      //hash de la contra
+      const user = await User.findById(tokenExist.user);
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+      //guardas cambios en usuario y borras token
+      Promise.allSettled([user.save(), tokenExist.deleteOne()]);
+      await res.send("El password se modifico correctamente");
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
