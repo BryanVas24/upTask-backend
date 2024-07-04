@@ -47,5 +47,11 @@ router.post(
   handleInputErrors,
   AuthController.forgotPassword
 );
+router.post(
+  "/validate-token",
+  body("token").notEmpty().withMessage("El token no puede estar vacio"),
+  handleInputErrors,
+  AuthController.confirmTokenforpasswordChange
+);
 
 export default router;
