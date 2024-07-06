@@ -190,7 +190,8 @@ export class AuthController {
 
   static passwordChangeWhitToken = async (req: Request, res: Response) => {
     try {
-      const { token, password } = req.body;
+      const { password } = req.body;
+      const { token } = req.params;
       //revisa si el token es valido
       const tokenExist = await Token.findOne({ token });
       if (!tokenExist) {
