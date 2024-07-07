@@ -6,10 +6,12 @@ import { handleInputErrors } from "../middleware/validation";
 import { TaskController } from "../controllers/TaskController";
 import { validateProjectExist } from "../middleware/project";
 import { taskBelongsToProject, validateTaskExist } from "../middleware/task";
+import { authenticate } from "../middleware/auth";
 const router = Router();
 //cuando hagan post a la ruta api/projects
 router.post(
   "/",
+  authenticate,
   //acá se valida con express-validator
   body("projectName")
     .notEmpty()

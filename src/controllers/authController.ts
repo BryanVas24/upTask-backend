@@ -5,6 +5,7 @@ import Token from "../models/Token";
 import { generateToken } from "../utils/token";
 import { AuthEmail } from "../emails/AuthEmails";
 import { token } from "morgan";
+import { generateJWT } from "../utils/jwt";
 
 export class AuthController {
   static createAccount = async (req: Request, res: Response) => {
@@ -97,6 +98,8 @@ export class AuthController {
         const error = new Error("Password incorrecta");
         return res.status(401).json({ error: error.message });
       }
+
+      const jwToken = generateJWT({ id: user.id });
 
       res.send("Inicio de sesión exitoso");
     } catch (error) {
