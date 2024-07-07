@@ -102,7 +102,7 @@ export class AuthController {
 
       const jwToken = generateJWT({ id: user.id });
 
-      res.send("Inicio de sesión exitoso");
+      res.send(jwToken);
     } catch (error) {
       res.status(500).json({ error: "Hubo un error" });
     }
