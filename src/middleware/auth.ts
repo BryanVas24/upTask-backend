@@ -1,6 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
+import User, { Iuser } from "../models/User";
+import { ExpressValidator } from "express-validator";
+//para que request conozca a user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: Iuser;
+    }
+  }
+}
 export const authenticate = async (
   req: Request,
   res: Response,
@@ -19,7 +28,13 @@ export const authenticate = async (
     const decoded = jwt.verify(jwToken, process.env.JWT_SECRET);
     //esto es porque no aparecia el id en decoded entonces lo verifique
     if (typeof decoded === "object" && decoded.id) {
-      const user = await User.findById(decoded.id);
+      //el select es para seleccionar lo que queres tomar
+      const user = await User.findById(decoded.id).select("_id name email");
+      if (user) {
+        req.user = user;
+      } else {
+        res.status(500).json({ error: "Token no valido" });
+      }
     }
 
     console.log(decoded);

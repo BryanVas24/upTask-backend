@@ -86,6 +86,7 @@ export class AuthController {
           name: user.name,
           token: token.token,
         });
+        token.save();
         const error = new Error(
           "La cuenta no a sido confirmada, hemos enviado un email"
         );
