@@ -28,7 +28,7 @@ router.post(
   ProjectController.createProject
 );
 //cuando hagan get a la ruta api/projects
-router.get("/", ProjectController.getAllProjects);
+router.get("/", authenticate, ProjectController.getAllProjects);
 //cuando hagan una busqueda por id a la ruta api/projects
 router.get(
   "/:id",

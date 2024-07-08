@@ -5,7 +5,13 @@ export class ProjectController {
   //toma todos los proyectos
   static getAllProjects = async (req: Request, res: Response) => {
     try {
-      const projects = await Project.find({});
+      //or sirve para agregar multiples condiciones
+      const projects = await Project.find({
+        $or: [
+          //toma solo los proyectos del usuario autenticasdo
+          { manager: { $in: req.user.id } },
+        ],
+      });
       res.json(projects);
     } catch (error) {
       console.error(error);
