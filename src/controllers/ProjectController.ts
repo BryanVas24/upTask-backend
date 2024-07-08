@@ -55,9 +55,11 @@ export class ProjectController {
   };
   //crea proyectos
   static createProject = async (req: Request, res: Response) => {
+    const project = new Project(req.body);
+    project.manager = req.user.id;
     try {
-      await Project.create(req.body);
-      res.send("Projecto creado correctamente");
+      await project.save();
+      res.send("Proyecto creado correctamente");
     } catch (error) {
       console.log(error);
     }
