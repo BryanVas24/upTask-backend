@@ -8,10 +8,12 @@ import { validateProjectExist } from "../middleware/project";
 import { taskBelongsToProject, validateTaskExist } from "../middleware/task";
 import { authenticate } from "../middleware/auth";
 const router = Router();
+//proteje todos los endpoints que usen el router
+router.use(authenticate);
 //cuando hagan post a la ruta api/projects
 router.post(
   "/",
-  authenticate,
+
   //acá se valida con express-validator
   body("projectName")
     .notEmpty()
@@ -28,7 +30,7 @@ router.post(
   ProjectController.createProject
 );
 //cuando hagan get a la ruta api/projects
-router.get("/", authenticate, ProjectController.getAllProjects);
+router.get("/", ProjectController.getAllProjects);
 //cuando hagan una busqueda por id a la ruta api/projects
 router.get(
   "/:id",

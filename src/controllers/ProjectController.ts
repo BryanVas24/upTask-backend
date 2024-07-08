@@ -28,6 +28,9 @@ export class ProjectController {
       if (!project) {
         return res.status(404).json({ error: "No se encontró el proyecto" });
       }
+      if (project.manager.toString() !== req.user.id.toString()) {
+        return res.status(404).json({ error: "Acción no valida" });
+      }
       // Envías los datos del proyecto encontrado
       res.json(project);
     } catch (error) {
