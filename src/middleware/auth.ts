@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+
 import User, { Iuser } from "../models/User";
 import { ExpressValidator } from "express-validator";
 //para que request conozca a user
@@ -32,14 +33,12 @@ export const authenticate = async (
       const user = await User.findById(decoded.id).select("_id name email");
       if (user) {
         req.user = user;
+        next();
       } else {
         res.status(500).json({ error: "Token no valido" });
       }
     }
-
-    console.log(decoded);
   } catch (error) {
     res.status(500).json({ error: "Token no valido " + error.message });
   }
-  next();
 };
