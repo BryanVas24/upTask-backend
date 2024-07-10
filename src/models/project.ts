@@ -13,6 +13,7 @@ export interface IProject extends Document {
   //y lo de ITask es para que sepa lo que va a recibir y el & Document para heredar del Document
   tasks: PopulatedDoc<ITask & Document>[];
   manager: PopulatedDoc<Iuser & Document>;
+  team: PopulatedDoc<Iuser & Document>[];
 }
 
 //esto es para mongoose, es lo mismo pero esto es el modelo
@@ -40,6 +41,10 @@ const ProjectSchema: Schema = new Schema(
       },
     ],
     manager: {
+      type: Types.ObjectId,
+      ref: "User",
+    },
+    team: {
       type: Types.ObjectId,
       ref: "User",
     },
