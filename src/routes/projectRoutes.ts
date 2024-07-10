@@ -7,6 +7,7 @@ import { TaskController } from "../controllers/TaskController";
 import { validateProjectExist } from "../middleware/project";
 import { taskBelongsToProject, validateTaskExist } from "../middleware/task";
 import { authenticate } from "../middleware/auth";
+import { TeamController } from "../controllers/TeamController";
 const router = Router();
 //proteje todos los endpoints que usen el router
 router.use(authenticate);
@@ -65,7 +66,13 @@ router.delete(
   param("id").isMongoId().withMessage("id no válido"),
   ProjectController.deleteProject
 );
-
+/*-----RUTAS PARA EQUIPO ----- */
+router.post(
+  "/:projectId/team/find",
+  body("email").isEmail().withMessage("Email no valido"),
+  handleInputErrors,
+  TeamController.findMemberbyEmail
+);
 /*-----------------ACA ESTAN LAS RUTAS DE LAS TAREAS--------------------*/
 
 //recibe un valor en la url y que hacer con el cada vez que una url lo tenga
