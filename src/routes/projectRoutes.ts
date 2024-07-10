@@ -73,6 +73,12 @@ router.post(
   handleInputErrors,
   TeamController.findMemberbyEmail
 );
+router.post(
+  "/:projectId/team",
+  body("id").isMongoId().withMessage("Id no valido"),
+  handleInputErrors,
+  TeamController.AddMemberById
+);
 /*-----------------ACA ESTAN LAS RUTAS DE LAS TAREAS--------------------*/
 
 //recibe un valor en la url y que hacer con el cada vez que una url lo tenga
