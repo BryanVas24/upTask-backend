@@ -79,6 +79,12 @@ router.post(
   handleInputErrors,
   TeamController.AddMemberById
 );
+router.delete(
+  "/:projectId/team",
+  body("id").isMongoId().withMessage("Id no valido"),
+  handleInputErrors,
+  TeamController.RemoveMemberById
+);
 /*-----------------ACA ESTAN LAS RUTAS DE LAS TAREAS--------------------*/
 
 //recibe un valor en la url y que hacer con el cada vez que una url lo tenga
