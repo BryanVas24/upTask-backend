@@ -3,7 +3,7 @@ import User from "../models/User";
 import Project from "../models/project";
 export class TeamController {
   static findMemberbyEmail = async (req: Request, res: Response) => {
-    const { email } = req.user;
+    const { email } = req.body;
     //buscando el usuario
     const user = await User.findOne({ email }).select("id email name");
     if (!user) {
