@@ -67,12 +67,9 @@ router.delete(
   ProjectController.deleteProject
 );
 /*-----RUTAS PARA EQUIPO ----- */
-router.post(
-  "/:projectId/team/find",
-  body("email").isEmail().withMessage("Email no valido"),
-  handleInputErrors,
-  TeamController.findMemberbyEmail
-);
+router.get("/:projectId/team", TeamController.getTeamMembers);
+
+router.post("/:projectId/team/find", TeamController.findMemberbyEmail);
 router.post(
   "/:projectId/team",
   body("id").isMongoId().withMessage("Id no valido"),
