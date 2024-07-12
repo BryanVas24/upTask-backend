@@ -10,6 +10,7 @@ export class ProjectController {
         $or: [
           //toma solo los proyectos del usuario autenticasdo
           { manager: { $in: req.user.id } },
+          { team: { $in: req.user.id } },
         ],
       });
       res.json(projects);
@@ -28,7 +29,10 @@ export class ProjectController {
       if (!project) {
         return res.status(404).json({ error: "No se encontró el proyecto" });
       }
-      if (project.manager.toString() !== req.user.id.toString()) {
+      if (
+        project.manager.toString() !== req.user.id.toString() &&
+        !project.team.includes(req.user.id)
+      ) {
         return res.status(404).json({ error: "Acción no valida" });
       }
       // Envías los datos del proyecto encontrado
