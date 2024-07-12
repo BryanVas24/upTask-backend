@@ -32,21 +32,25 @@ export class TeamController {
     await req.project.save();
     res.send("Usuario agregado correctamente");
   };
-  static RemoveMemberById = async (req: Request, res: Response) => {
-    const { id } = req.body;
 
-    if (!req.project.team.some((team) => team.toString() === id.toString())) {
+  static RemoveMemberById = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+
+    if (
+      !req.project.team.some((team) => team.toString() === userId.toString())
+    ) {
       const error = new Error("El usuario no forma parte del proyecto");
       return res.status(409).json({ error: error.message });
     }
 
     req.project.team = req.project.team.filter(
-      (teamMember) => teamMember.toString() !== id
+      (teamMember) => teamMember.toString() !== userId
     );
 
     await req.project.save();
     res.send("Usuario eliminado correctamente");
   };
+
   static getTeamMembers = async (req: Request, res: Response) => {
     const { id } = req.project;
     const project = await Project.findById(id).populate({
