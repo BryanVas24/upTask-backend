@@ -43,3 +43,14 @@ export function taskBelongsToProject(
   }
   next();
 }
+
+export function hasAuthorization(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.user.id.toString() !== req.project.manager.toString()) {
+    return res.status(400).json({ error: "No tienes permiso de hacer eso" });
+  }
+  next();
+}

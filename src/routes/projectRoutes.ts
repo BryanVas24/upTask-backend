@@ -5,7 +5,11 @@ import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import { TaskController } from "../controllers/TaskController";
 import { validateProjectExist } from "../middleware/project";
-import { taskBelongsToProject, validateTaskExist } from "../middleware/task";
+import {
+  hasAuthorization,
+  taskBelongsToProject,
+  validateTaskExist,
+} from "../middleware/task";
 import { authenticate } from "../middleware/auth";
 import { TeamController } from "../controllers/TeamController";
 const router = Router();
@@ -89,8 +93,10 @@ router.param("projectId", validateProjectExist);
 //si te fijas solo podes ir poniendo un callback a la vez, se ejecutan en ese orden
 router.param("taskId", validateTaskExist);
 router.param("taskId", taskBelongsToProject);
+
 router.post(
   "/:projectId/tasks",
+  hasAuthorization,
   //siempre validando con express validator
   body("name").notEmpty().withMessage("El nombre de la tarea es obligatorio"),
   body("description")
@@ -110,6 +116,7 @@ router.get(
 );
 router.put(
   "/:projectId/tasks/:taskId",
+  hasAuthorization,
   param("taskId").isMongoId().withMessage("id no válido"),
   body("name").notEmpty().withMessage("El nombre de la tarea es obligatorio"),
   body("description")
@@ -120,6 +127,7 @@ router.put(
 );
 router.delete(
   "/:projectId/tasks/:taskId",
+  hasAuthorization,
   param("taskId").isMongoId().withMessage("id no válido"),
   handleInputErrors,
   TaskController.deleteTask
