@@ -34,7 +34,7 @@ export class TaskController {
       //esto es para traer tambien los datos del que cambie el estado de la tarea
       const task = await Task.findById(req.task.id).populate({
         path: "completedBy",
-        select: " id name",
+        select: "id name email",
       });
       res.json(task);
     } catch (error) {
