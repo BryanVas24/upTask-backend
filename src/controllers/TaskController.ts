@@ -16,6 +16,7 @@ export class TaskController {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
   };
+
   static getProjectTask = async (req: Request, res: Response) => {
     try {
       //esto es como hacer un where pero el populate te trae todos los datos de ese modelo
@@ -46,6 +47,7 @@ export class TaskController {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
   };
+
   static deleteTask = async (req: Request, res: Response) => {
     try {
       //acá se setean las tareas nuevamente al projecto
@@ -64,6 +66,12 @@ export class TaskController {
     try {
       const { status } = req.body;
       req.task.status = status;
+
+      if (status === "pending") {
+        req.task.completedBy = null;
+      } else {
+        req.task.completedBy = req.user.id;
+      }
       await req.task.save();
       res.send("tarea Actualizada");
     } catch (error) {

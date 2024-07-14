@@ -18,6 +18,7 @@ export interface ITask extends Document {
   //types sirve para acceder a los tipos que tambien brinda mongoo
   project: Types.ObjectId;
   status: TaskStatus;
+  completedBy: Types.ObjectId;
 }
 
 export const TaskSchema: Schema = new Schema(
@@ -41,6 +42,11 @@ export const TaskSchema: Schema = new Schema(
       type: String,
       enum: Object.values(taskStatus),
       default: taskStatus.PENDING,
+    },
+    completedBy: {
+      type: Types.ObjectId,
+      ref: "User",
+      default: null,
     },
   },
   //esto sirve para que cambie la fecha cuando se crea y se actualiza dinamicamente
