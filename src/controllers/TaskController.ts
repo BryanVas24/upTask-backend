@@ -31,7 +31,12 @@ export class TaskController {
 
   static getTaskById = async (req: Request, res: Response) => {
     try {
-      res.json(req.task);
+      //esto es para traer tambien los datos del que cambie el estado de la tarea
+      const task = await Task.findById(req.task.id).populate({
+        path: "completedBy",
+        select: " id name",
+      });
+      res.json(task);
     } catch (error) {
       res.status(500).json({ error: `Ocurrio el siguiente error: ${error}` });
     }
