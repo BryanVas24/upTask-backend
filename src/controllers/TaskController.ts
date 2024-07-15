@@ -71,7 +71,12 @@ export class TaskController {
     try {
       const { status } = req.body;
       req.task.status = status;
-
+      //para llevar el historial
+      const data = {
+        user: req.user.id,
+        status,
+      };
+      req.task.completedBy.push(data);
       if (status === "pending") {
         req.task.completedBy = null;
       } else {
