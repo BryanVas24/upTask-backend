@@ -77,11 +77,7 @@ export class TaskController {
         status,
       };
       req.task.completedBy.push(data);
-      if (status === "pending") {
-        req.task.completedBy = null;
-      } else {
-        req.task.completedBy = req.user.id;
-      }
+
       await req.task.save();
       res.send("tarea Actualizada");
     } catch (error) {
