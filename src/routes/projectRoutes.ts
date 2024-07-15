@@ -139,5 +139,12 @@ router.post(
   handleInputErrors,
   TaskController.updateStatus
 );
-
+/*---------------NOTAS--------------- */
+router.post(
+  "/:projectId/tasks/:taskId/notes",
+  body("content")
+    .notEmpty()
+    .withMessage("El contenido de la nota es obligatorio"),
+  handleInputErrors
+);
 export default router;
