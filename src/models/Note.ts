@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 export interface INote extends Document {
   content: string;
-  createdby: Types.ObjectId;
+  createdBy: Types.ObjectId;
   task: Types.ObjectId;
 }
 
