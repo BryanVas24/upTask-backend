@@ -55,6 +55,7 @@ export class NoteController {
     req.task.notes = req.task.notes.filter(
       (note) => note.toString() !== noteId.toString()
     );
+  
     try {
       await Promise.allSettled([note.deleteOne(), req.task.save()]);
       res.send("Nota eliminada");
