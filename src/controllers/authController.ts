@@ -239,4 +239,27 @@ export class AuthController {
       res.status(500).send("Ups... eso no debio suceder");
     }
   };
+
+  static updatePasswordInprofile = async (req: Request, res: Response) => {
+    const { current_password, password } = req.body;
+    const user = await User.findById(req.user.id);
+
+    const isCorrectPassword = await bcrypt.compare(
+      current_password,
+      user.password
+    );
+
+    if (!isCorrectPassword) {
+      const error = new Error("El password es incorrecto");
+      return res.status(401).json({ error: error.message });
+    }
+    try {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+      await user.save();
+      res.send("El password se modificó correctamente");
+    } catch (error) {
+      res.status(500).send("Hubo un error");
+    }
+  };
 }
