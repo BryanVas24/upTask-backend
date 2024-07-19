@@ -262,4 +262,16 @@ export class AuthController {
       res.status(500).send("Hubo un error");
     }
   };
+  static checkpassword = async (req: Request, res: Response) => {
+    const { password } = req.body;
+    const user = await User.findById(req.user.id);
+
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+    if (!isCorrectPassword) {
+      const error = new Error("El password es incorrecto");
+      return res.status(401).json({ error: error.message });
+    }
+    res.send("Password correcto");
+  };
 }
