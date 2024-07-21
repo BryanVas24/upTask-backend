@@ -1,7 +1,8 @@
 //un populet es como un join en bases relacionales
 import mongoose, { Document, Schema, PopulatedDoc, Types } from "mongoose";
-import { ITask } from "./task";
+import Task, { ITask } from "./task";
 import { Iuser } from "./User";
+import Note from "./Note";
 
 //Este type es para ts
 //Documente & hereda todo el tipado de Document
@@ -53,6 +54,17 @@ const ProjectSchema: Schema = new Schema(
   },
   { timestamps: true }
 );
+//siempre debes colocar los middlewares antes del modelo
+ProjectSchema.pre("deleteOne", { document: true }, async function () {
+  const projectId = this._id;
+  if (!projectId) return;
+
+  const tasks = await Task.find({ project: projectId });
+  for (const task of tasks) {
+    await Note.deleteMany({ task: task.id });
+  }
+  await Task.deleteMany({ project: projectId });
+});
 
 //asi se agrega un modelo y debe tener un nombre unico y el esquema del que va a crearlo
 const Project = mongoose.model<IProject>("Project", ProjectSchema);
