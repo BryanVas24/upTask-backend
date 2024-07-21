@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
+import Note from "./Note";
 //el as const al final de el taskStatus hace que las propiedades sean read Only
 const taskStatus = {
   PENDING: "pending",
@@ -71,7 +72,14 @@ export const TaskSchema: Schema = new Schema(
   //esto sirve para que cambie la fecha cuando se crea y se actualiza dinamicamente
   { timestamps: true }
 );
-
+//Este codigo de el middleware es para eliminar todas las notas de una tarea si esta se borra
+//midleware es una funcion que se ejecuta despues de cierta accion en mongoose,antes se le conocian como hooks (siempre en mongose)
+//el primero es la funcion a escuchar, el segundo es un objeto de config y
+TaskSchema.pre("deleteOne", { document: true }, async function () {
+  const taskId = this._id;
+  if (!taskId) return;
+  await Note.deleteMany({ task: taskId });
+});
 //esto conecta el schema con la interfaz
 const Task = mongoose.model<ITask>("Task", TaskSchema);
 export default Task;

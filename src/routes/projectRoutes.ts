@@ -31,7 +31,6 @@ router.post(
     .notEmpty()
     .withMessage("La descripción del proyecto es obligatorio"),
   //esto viene de middleware y verifica que no exista ningun mensaje de error
-  handleInputErrors,
   //aca se manda a llamar la funcion que hace el envio de datos
   ProjectController.createProject
 );
@@ -62,7 +61,7 @@ router.put(
     .withMessage("La descripción del proyecto es obligatorio"),
   //esto viene de middleware y verifica que no exista ningun mensaje de error
   handleInputErrors,
-
+  hasAuthorization,
   ProjectController.updateProject
 );
 //cuando quieran hacer un delete a la ruta api/projects
